@@ -24,6 +24,9 @@
 *.bak
 *.log
 
+# Claude settings (local only)
+.claude/settings.local.json
+
 # Sensitive information (add specific files here)
 # secrets.md
 # passwords.txt
