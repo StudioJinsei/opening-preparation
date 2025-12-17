@@ -67,8 +67,12 @@
 
 **📸 参考画像：**
 
-<img src="./content/images/ichiryumanpuku-menu-1.PNG" width="45%" alt="メニュー1">
-<img src="./content/images/ichiryumanpuku-menu-2.PNG" width="45%" alt="メニュー2">
+<table>
+  <tr>
+    <td><img src="./content/images/ichiryumanpuku-menu-1.PNG" width="300" alt="メニュー1"></td>
+    <td><img src="./content/images/ichiryumanpuku-menu-2.PNG" width="300" alt="メニュー2"></td>
+  </tr>
+</table>
 
 *左：日本語メニュー・Englishメニュー切り替え　右：テイクアウト予約・店舗情報*
 
@@ -98,9 +102,13 @@
 
 **📸 参考画像：**
 
-<img src="./content/images/lalacitta-richmenu.PNG" width="30%" alt="リッチメニュー">
-<img src="./content/images/lalacitta-store.PNG" width="30%" alt="店舗情報">
-<img src="./content/images/lalacitta-parking.PNG" width="30%" alt="駐車場案内">
+<table>
+  <tr>
+    <td><img src="./content/images/lalacitta-richmenu.PNG" width="200" alt="リッチメニュー"></td>
+    <td><img src="./content/images/lalacitta-store.PNG" width="200" alt="店舗情報"></td>
+    <td><img src="./content/images/lalacitta-parking.PNG" width="200" alt="駐車場案内"></td>
+  </tr>
+</table>
 
 *左：リッチメニュー　中：店舗詳細・アクセス　右：駐車場案内*
 
