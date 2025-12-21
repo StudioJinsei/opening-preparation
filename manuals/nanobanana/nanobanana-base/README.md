@@ -7,6 +7,36 @@ StudioJinseiのすべてのビジュアル制作で共通して使用する基�
 
 ---
 
+## 🚀 使い方（シンプルな流れ）
+
+### 新しいプロジェクトを始める場合
+
+1. **このディレクトリ（nanobanana-base）を渡す**
+2. **プロジェクト概要を伝える**
+3. AIが自動でセットアップ
+
+### プロジェクト中に修正が必要になった場合
+
+| 担当 | 作業 |
+|-----|------|
+| AI | プロジェクト内のnanobanana-baseを編集 + CHANGELOG.md更新 |
+| あなた | 確認 → 手動で大元に差し替え → コミット |
+
+**手動差し替えコマンド（あなたが実行）:**
+```bash
+# 大元を差し替え
+rm -rf ~/Desktop/StudioJinsei/opening-preparation/manuals/nanobanana/nanobanana-base
+cp -r ~/Desktop/StudioJinsei/[プロジェクト]/nanobanana-base ~/Desktop/StudioJinsei/opening-preparation/manuals/nanobanana/
+
+# 大元でコミット
+cd ~/Desktop/StudioJinsei/opening-preparation
+git add manuals/nanobanana/nanobanana-base/
+git commit -m "feat(nanobanana): v[日付] - [変更内容]"
+git push
+```
+
+---
+
 ## 📁 このディレクトリについて
 
 ### 目的
@@ -24,25 +54,32 @@ StudioJinseiのすべてのビジュアル制作で共通して使用する基�
 ## 📂 ファイル構成
 
 ```
-manuals/
-└── nanobanana/
-    ├── nanobanana-base/         # StudioJinsei用ベース（このディレクトリ）
-    │   ├── README.md
-    │   ├── brand-foundation.md  ★
-    │   ├── kotone-character.md  ★
-    │   ├── setup-guide.md
-    │   ├── usage-guide.md
-    │   ├── pricing-guide.md
-    │   ├── tips.md
-    │   ├── SKILL.md
-    │   └── images/
-    └── reference-nanobanana/    # 師匠オリジナル版（参考資料）
-        ├── README.md
-        ├── SKILL-original.md
-        └── ...
+nanobanana-base/                # StudioJinsei用ベース（このディレクトリ）
+├── README.md                   # このファイル
+├── nanobanana.py               # 画像生成ツール（動作確認済み）★
+├── brand-foundation.md         # ブランド基盤 ★必読
+├── kotone-character.md         # コトネちゃん設定 ★
+├── setup-guide.md              # セットアップガイド
+├── usage-guide.md              # 使い方ガイド
+├── pricing-guide.md            # 料金ガイド
+├── tips.md                     # Tips・コツ
+├── SKILL.md                    # Claudeスキル定義
+└── images/                     # 参照画像ディレクトリ
 ```
 
+**注意：** プロジェクト固有のファイル（`logo_prompt_dalle3.txt`、`CHANGELOG.md`、`VERSION_CONTROL.md`）はプロジェクトルートに配置してください。詳細は「プロジェクトで作成されるディレクトリ」セクションを参照してください。
+
 ★ = すべてのビジュアル制作で必ず参照するファイル
+
+**プロジェクトで作成されるディレクトリ:**
+```
+your-project/
+├── nanobanana-base/            # このディレクトリをコピー
+├── logo_prompt.txt             # 用途別プロンプト
+└── images/
+    └── output/                 # 生成画像の保存先（自動作成）
+        └── logo_20251221_154115.png
+```
 
 ---
 
@@ -50,13 +87,19 @@ manuals/
 
 詳細は各ファイルを参照してください：
 
+- **[nanobanana.py](./nanobanana.py)** ★ツール - 画像生成自動化ツール（Imagen 4.0対応・動作確認済み）
 - **[brand-foundation.md](./brand-foundation.md)** ★必読 - ブランド共通デザイン土台、共通プロンプト基盤
 - **[kotone-character.md](./kotone-character.md)** ★コトネちゃん制作時 - コトネちゃん設定、プロンプト
-- **[setup-guide.md](./setup-guide.md)** - セットアップ方法、環境変数設定、Claudeスキル設定
-- **[usage-guide.md](./usage-guide.md)** - 画像生成ガイド、プロンプト作成方法
+- **[setup-guide.md](./setup-guide.md)** - セットアップ方法、環境変数設定、変更管理手順
+- **[usage-guide.md](./usage-guide.md)** - 画像生成ガイド、プロンプト作成方法、二段階ワークフロー
 - **[pricing-guide.md](./pricing-guide.md)** - 料金目安、API代金確認方法、コスト管理
 - **[tips.md](./tips.md)** - プロンプト作成のコツ、チェックリスト、品質管理
 - **[SKILL.md](./SKILL.md)** - Claudeスキル定義、AI向け自動セットアップ手順
+
+**プロジェクト固有ファイル（プロジェクトルートに配置）:**
+- `logo_prompt_dalle3.txt` - DALL-E 3用シンプルプロンプト（無料プロトタイプ用）
+- `CHANGELOG.md` - 変更履歴、改善記録、学び（AI読解改善含む）
+- `VERSION_CONTROL.md` - バージョン管理ファイル
 
 ---
 
@@ -126,15 +169,6 @@ manuals/
 - [Tips・チェックリスト](./tips.md) - プロンプト作成のコツ、品質管理
 - [SKILL.md](./SKILL.md) - Claudeスキル定義
 
-### 実制作ディレクトリ（このベースを参照）
-- [ロゴ生成](../logo-generation/) - ロゴ制作用ディレクトリ（このベースを参照）
-
-### 参考リポジトリ・資料
-- [reference-nanobanana](../reference-nanobanana/) - 師匠（dataanalytics2020）提供のオリジナル版（参考資料）
-  - 師匠からもらったNanobanana Skillのオリジナル版
-  - StudioJinsei版を作る際の参考として保存
-  - 詳細は [reference-nanobanana/README.md](../reference-nanobanana/README.md) を参照
-
 ### 外部資料
 - [会社コンセプト](../../opening-preparation/strategy/company-concept.md)
 - [デザインコンセプト](../../opening-preparation/strategy/design-concept.md)
@@ -142,46 +176,57 @@ manuals/
 
 ---
 
-## 📝 変更があった場合
+## 📝 変更管理の流れ（プロジェクト → 大元）
 
-**このopening-preparationリポジトリのnanobanana-baseディレクトリだけを更新すればOK！**
+### 役割分担
+
+| 担当 | 作業 |
+|-----|------|
+| **AI** | プロジェクト内のnanobanana-baseを編集 + CHANGELOG.md更新 |
+| **あなた** | 確認 → 手動で大元に差し替え → コミット |
+
+### Step 1: AIがプロジェクト内で編集
+
+1. プロジェクトで nanobanana-base を改善
+2. CHANGELOG.md に変更内容を記録
+
+### Step 2: あなたが手動で大元に差し替え
 
 ```bash
-cd ~/Desktop/StudioJinsei
-git pull
+# 大元を差し替え
+rm -rf ~/Desktop/StudioJinsei/opening-preparation/manuals/nanobanana/nanobanana-base
+cp -r ~/Desktop/StudioJinsei/[プロジェクト]/nanobanana-base ~/Desktop/StudioJinsei/opening-preparation/manuals/nanobanana/
+
+# 大元でコミット
+cd ~/Desktop/StudioJinsei/opening-preparation
+git add manuals/nanobanana/nanobanana-base/
+git commit -m "feat(nanobanana): v[日付] - [変更内容]"
+git push
 ```
 
-すべての設定・プロンプト・ガイドがこのディレクトリに含まれているので、他のリポジトリは不要です。
+**例（brand/logoプロジェクトの場合）:**
+```bash
+rm -rf ~/Desktop/StudioJinsei/opening-preparation/manuals/nanobanana/nanobanana-base
+cp -r ~/Desktop/StudioJinsei/brand/logo/nanobanana-base ~/Desktop/StudioJinsei/opening-preparation/manuals/nanobanana/
+cd ~/Desktop/StudioJinsei/opening-preparation
+git add manuals/nanobanana/nanobanana-base/
+git commit -m "feat(nanobanana): v20251221 - ロゴ生成改善"
+git push
+```
 
-**重要：** 
-- このディレクトリは `manuals/nanobanana/nanobanana-base/` にあります
-- リポジトリ名は `opening-preparation` です
-- クローン時のパスは `manuals/nanobanana/nanobanana-base/`
-
-### 📦 GitHubリポジトリ情報
+### 📦 大元リポジトリ情報
 
 **リポジトリURL：** `https://github.com/StudioJinsei/opening-preparation`
+**nanobanana-baseの場所：** `manuals/nanobanana/nanobanana-base/`
 
-このURLを記載しておくことで、AIが自動的にクローンできるようになります。
+### ⚠️ プロジェクトでnanobanana-baseを取得する方法
 
-**使用例：**
+**新しいプロジェクトを始める時：**
 ```bash
-# 自動クローン（AIが実行可能）
-git clone https://github.com/StudioJinsei/opening-preparation temp
-cp -r temp/manuals/nanobanana/nanobanana-base .
-rm -rf temp
+# 大元からコピー
+cp -r ~/Desktop/StudioJinsei/opening-preparation/manuals/nanobanana/nanobanana-base ~/Desktop/StudioJinsei/[新プロジェクト]/
 ```
-
-### ⚠️ プロジェクトディレクトリでのbaseの取得方法
-
-詳細は [setup-guide.md](./setup-guide.md) の「プロジェクトディレクトリでのbaseの取得方法」セクションを参照してください。
-
-**簡単な手順：**
-1. 元のリポジトリからクローンしてコピー（推奨）
-2. または最新版を手動でコピー
-
-**注意：** baseが更新されたら、各プロジェクトディレクトリのbaseも最新版に更新することを推奨します。
 
 ---
 
-**最終更新：2025/12/20**
+**最終更新：2025/12/21**

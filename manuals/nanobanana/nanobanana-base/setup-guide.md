@@ -251,18 +251,94 @@ export GOOGLE_API_KEY="AIzaSyBs2FQS6FYWwx9LKQdyywkBFTEXt5tK9Z8"
 
 ---
 
-## 📝 変更があった場合
+## 📝 変更管理の流れ（プロジェクト → 大元）
 
-**このopening-preparationリポジトリのnanobanana-baseディレクトリだけを更新すればOK！**
+### 役割分担
+
+| 担当 | 作業 |
+|-----|------|
+| **AI** | プロジェクト内のnanobanana-baseを編集 + CHANGELOG.md更新 |
+| **あなた** | 確認 → 手動で大元に差し替え → コミット |
+
+### Step 1: AIがプロジェクト内で編集
+
+1. プロジェクトで nanobanana-base を改善
+2. CHANGELOG.md に変更内容を記録
+
+### Step 2: あなたが手動で大元に差し替え
 
 ```bash
-cd ~/Desktop/StudioJinsei
-git pull
+# 大元を差し替え
+rm -rf ~/Desktop/StudioJinsei/opening-preparation/manuals/nanobanana/nanobanana-base
+cp -r ~/Desktop/StudioJinsei/[プロジェクト]/nanobanana-base ~/Desktop/StudioJinsei/opening-preparation/manuals/nanobanana/
+
+# 大元でコミット
+cd ~/Desktop/StudioJinsei/opening-preparation
+git add manuals/nanobanana/nanobanana-base/
+git commit -m "feat(nanobanana): v[日付] - [変更内容]"
+git push
 ```
 
-すべての設定・プロンプト・ガイドがこのディレクトリに含まれているので、他のリポジトリは不要です。
+---
 
-**重要：** このディレクトリは `manuals/nanobanana/nanobanana-base/` にあります。クローン時のパスに注意してください。
+### CHANGELOG.mdの記録について
+
+**重要:** すべての変更は `CHANGELOG.md` に記録してください。
+
+**場所:** プロジェクトルートの `CHANGELOG.md`（例：`brand/logo/CHANGELOG.md`）
+
+**注意：** CHANGELOG.mdはプロジェクト固有のファイルなので、プロジェクトルートに配置します。`nanobanana-base/` 内ではありません。
+
+---
+
+## 📝 CHANGELOG.mdの作成方法
+
+### 基本的な流れ
+
+1. **AIが変更を記録** - プロジェクト内で編集 + CHANGELOG.md に追記
+2. **あなたが確認** - 変更内容を確認
+3. **あなたが手動で差し替え＆コミット** - 上記コマンドを実行
+
+### CHANGELOG.mdのテンプレート
+
+プロジェクトルートに `CHANGELOG.md` がない場合は、以下のテンプレートで作成してください：
+
+```markdown
+# Nanobanana 変更履歴・改善記録
+
+**プロジェクト:** [プロジェクト名]
+**作成者:** [あなたの名前]
+**最終更新:** [日付]
+
+---
+
+## 📅 [日付] - [変更内容のタイトル]
+
+### 変更理由
+[なぜ変更したか]
+
+### 変更ファイル
+- `ファイル名` - [変更内容]
+```
+
+### 記録例
+
+```markdown
+## 📅 2025/12/22 - API修正（Imagen 4.1対応）
+
+### 変更理由
+新しいImagen 4.1モデルに対応するため
+
+### 変更ファイル
+- `nanobanana.py` - `generate_image`関数を修正
+```
+
+### 変更履歴ファイルのメリット
+
+- ✅ 変更理由が明確に記録される
+- ✅ バージョン管理しやすい
+- ✅ 将来の参考資料になる
+- ✅ AIが自動で処理できる
 
 ---
 

@@ -1,7 +1,6 @@
 # Nanobanana 画像生成ガイド｜StudioJinsei
 
 **作成日：2025/12/20**
-**ベース：師匠（dataanalytics2020）提供のガイド**
 
 StudioJinseiのビジュアル制作に特化したNanobanana使い方ガイドです。
 
@@ -257,4 +256,3 @@ python scripts/nanobanana.py prompts/studiojinsei/site_header.md \
 - [ブランド共通デザイン土台](./brand-foundation.md)
 - [コトネちゃん設定](./kotone-character.md)
 - [セットアップガイド](./setup-guide.md)
-- [師匠オリジナル版](./reference-nanobanana/)
