@@ -4,6 +4,38 @@
 
 ---
 
+## v20251221-env-model-support (2025/12/21)
+
+### 変更内容
+
+**.envファイルサポートとモデル名デフォルト値の追加**
+
+#### 変更ファイル
+- `setup-guide.md` - .envファイルの使用方法を追加
+- `nanobanana.py` - モデル名のデフォルト値を`imagen-4.0-generate-001`に設定
+
+#### 主要な改善点
+
+**1. .envファイルサポートの追加**
+- ✅ プロジェクト単位でAPIキーを管理できるように
+- ✅ `.env`ファイルの作成方法と使用方法を追加
+- ✅ `.gitignore`で除外する方法を明記
+- ✅ グローバル環境変数との使い分けを説明
+
+**2. nanobanana.pyの改善**
+- ✅ `generate_image`関数にデフォルトモデル名`imagen-4.0-generate-001`を追加
+- ✅ モデル指定が不要な場合でも動作するように改善
+
+### 動作確認
+- ✅ .envファイルからのAPIキー読み込み確認
+- ✅ デフォルトモデル名での画像生成確認
+
+### 元プロジェクト
+- `/Users/rin5uron/Desktop/StudioJinsei/brand/logo/`
+- CHANGELOG.md に詳細記録あり
+
+---
+
 ## v20251221-nanobanana-initial-setup (2025/12/21)
 
 ### 変更内容

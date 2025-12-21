@@ -10,20 +10,24 @@ StudioJinseiでNanobanana（Google Gemini API）を使用して画像生成す�
 
 | モデル名 | API名 | 特徴 | 料金目安 |
 |---------|-------|------|----------|
-| **Gemini 3 Pro Image** | gemini-3-pro-image-preview | 高品質・高解像度 | 約21-30円/枚 |
-| Gemini 2.5 Flash Image | gemini-2.5-flash-image | 高速・低コスト | 約6円/枚 |
+| **Imagen 4.0** | imagen-4.0-generate-001 | 高品質・安定版 | 約3-10円/枚 |
+| Imagen 4.0 Ultra | imagen-4.0-ultra-generate-001 | 最高品質 | 約10-30円/枚 |
+| Imagen 4.0 Fast | imagen-4.0-fast-generate-001 | 高速・低コスト | 約1-3円/枚 |
+| Gemini 2.5 Flash Image | gemini-2.5-flash-image | テキスト+画像 | 約6円/枚 |
 
-**推奨：** StudioJinseiのロゴやメインビジュアルは **Gemini 3 Pro Image** を使用
+**推奨：** StudioJinseiのロゴやメインビジュアルは **Imagen 4.0** (`imagen-4.0-generate-001`) を使用
+
+**重要：** Gemini 2.0 Flash (`gemini-2.0-flash-exp`) はテキスト生成専用で、画像生成には使用できません。
 
 ---
 
 ## 🔧 前提条件
 
 ### 必須
-- Google API Key（`GOOGLE_API_KEY`）
+- Google API Key（`GOOGLE_API_KEY`）- Imagen APIが有効なキー
 - opening-preparationリポジトリ
 - Python 3.x
-- google-generativeai パッケージ
+- google-genai パッケージ（新しいSDK、`google-generativeai`は非推奨）
 
 ### 環境変数
 - `GOOGLE_API_KEY`: あなたのGoogle API Key
@@ -118,13 +122,40 @@ Claude Codeで `@nanobanana` とメンションすると、このスキルが使
 
 ### 4. 環境変数を設定
 
-#### macOS/Linux（zsh）の場合
+#### 推奨：.envファイルを使用（プロジェクト単位）
+
+プロジェクトごとに異なるAPIキーを使う場合や、APIキーを安全に管理したい場合は.envファイルを使用します。
+
+```bash
+# nanobanana-baseディレクトリに.envファイルを作成
+cd nanobanana-base
+nano .env
+```
+
+`.env`ファイルの内容：
+```
+GOOGLE_API_KEY=your-api-key-here
+```
+
+**メリット：**
+- ✅ プロジェクトごとにAPIキーを管理できる
+- ✅ .gitignoreで除外すれば安全（APIキーをGitにコミットしない）
+- ✅ スクリプトが自動的に読み込む（手動でexportする必要なし）
+
+**注意：**
+- `.env`ファイルは`.gitignore`に追加してください
+- APIキーは絶対にGitにコミットしないこと
+
+#### 方法2：グローバル環境変数（全プロジェクト共通）
+
+すべてのプロジェクトで同じAPIキーを使う場合：
+
 ```bash
 # ~/.zshrc を編集
 nano ~/.zshrc
 
 # 以下を追加
-export GOOGLE_API_KEY="AIzaSyBs2FQS6FYWwx9LKQdyywkBFTEXt5tK9Z8"
+export GOOGLE_API_KEY="your-api-key-here"
 
 # 設定を反映
 source ~/.zshrc
@@ -135,17 +166,32 @@ source ~/.zshrc
 echo $GOOGLE_API_KEY
 ```
 
-### 5. Pythonパッケージをインストール
+### 5. Python仮想環境を作成（推奨）
+
+プロジェクトごとに独立したPython環境を作成します。
 
 ```bash
-pip install google-generativeai
+# プロジェクトルートで仮想環境を作成
+python3 -m venv venv
+
+# 仮想環境を有効化
+source venv/bin/activate
+
+# パッケージをインストール
+pip install google-genai
 ```
 
-または
+**重要：** 新しいSDKは`google-genai`です（`google-generativeai`は非推奨）。
+
+#### グローバルインストール（非推奨）
+
+システム全体にインストールする場合：
 
 ```bash
-pip3 install google-generativeai
+pip3 install google-genai
 ```
+
+**注意：** macOSの場合、`--break-system-packages`フラグが必要な場合があります。仮想環境の使用を推奨します。
 
 ---
 
@@ -172,15 +218,28 @@ pip3 install google-generativeai
 `generate_image.py` を作成：
 
 ```python
-import google.generativeai as genai
+from google import genai
 import os
 from pathlib import Path
 
-# API設定
-genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
+# .envファイルから環境変数を読み込む（オプション）
+env_file = Path("nanobanana-base/.env")
+if env_file.exists():
+    with open(env_file) as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                key, value = line.split('=', 1)
+                os.environ[key] = value
 
-# モデル選択（高品質版）
-model = genai.GenerativeModel("gemini-3-pro-image-preview")
+# API設定
+api_key = os.environ.get("GOOGLE_API_KEY")
+if not api_key:
+    print("エラー: GOOGLE_API_KEY が設定されていません")
+    exit(1)
+
+# Imagen Client
+client = genai.Client(api_key=api_key)
 
 # プロンプトを読み込む
 with open("prompt.txt", "r") as f:
@@ -188,13 +247,17 @@ with open("prompt.txt", "r") as f:
 
 # 画像生成
 print("画像生成中...")
-response = model.generate_content(prompt)
+response = client.models.generate_images(
+    model="imagen-4.0-generate-001",
+    prompt=prompt,
+    config={"number_of_images": 1, "aspect_ratio": "1:1"}
+)
 
 # 保存
 output_path = Path("output.png")
-if response.candidates and response.candidates[0].content.parts:
-    image_data = response.candidates[0].content.parts[0].inline_data.data
-    output_path.write_bytes(image_data)
+if response and hasattr(response, 'generated_images') and response.generated_images:
+    image = response.generated_images[0].image
+    output_path.write_bytes(image.image_bytes)
     print(f"画像を保存しました: {output_path}")
 else:
     print("画像生成に失敗しました")
@@ -203,6 +266,9 @@ else:
 ### 使い方
 
 ```bash
+# 仮想環境を有効化
+source venv/bin/activate
+
 # プロンプトファイルを作成
 nano prompt.txt
 
