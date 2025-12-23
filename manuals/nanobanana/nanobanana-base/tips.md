@@ -80,5 +80,65 @@ Nanobananaでの画像生成を効率化するためのTips集です。
 
 ---
 
-**最終更新：2025/12/20**
+## 🤖 Imagen 4.0の傾向と注意点
+
+### テキスト生成の傾向
+
+1. **大文字・小文字の制御が不安定**
+   - 2行レイアウトで全大文字（ALL CAPS）にしたがる傾向
+   - "Studio" → "STUDIO"、"Jinsei" → "JINSEI" になりやすい
+   - 対策：プロンプトで "title case" を明示的に指定（例：Studio, Jinsei）
+   - 1行レイアウトの方が大文字小文字の指定が通りやすい
+
+2. **プロンプト内の説明文を画像内に描画する**
+   - カラーコード（#55F0E8）やセクション見出し（"Background:"）を画像内テキストとして描画してしまう
+   - 対策：プロンプトを極限までシンプルに、説明は最小限に
+   - ベースプロンプト（brand-foundation.md）は含めない方が安全
+
+3. **色の指定が不安定**
+   - "black text only" と指定しても緑・青などの色が入ることがある
+   - 対策："NO GREEN, NO MINT, NO TEAL" と否定形で明示
+
+### プロンプトのベストプラクティス（Imagen 4.0）
+
+```
+良い例：
+A minimal logo on light beige background.
+Text in two lines, both words in title case:
+Studio
+Jinsei
+Bold sans-serif font, black text.
+Clean and simple. Square format.
+
+悪い例：
+TEXT REQUIREMENTS (CRITICAL):
+- Background: #F5F0E8
+- Font weight: 700
+→ これらの説明文が画像内に描画されてしまう
+```
+
+### プロンプトファイルの配置ルール
+
+```
+logo/
+├── prompts/
+│   ├── nanobanana/          # Imagen 4.0用（シンプル・短い）
+│   │   ├── current/         # 現在使用中のプロンプト
+│   │   │   ├── sns_2line.txt
+│   │   │   └── site_1line.txt
+│   │   └── archive/         # 過去のバージョン
+│   │       ├── v1/, v2/, v3/...
+│   │       └── 廃止したプロンプト
+│   └── dalle3/              # DALL-E 3用（詳細・長い）
+│       └── logo_prompt_*.txt
+```
+
+**ポイント：**
+- Imagen 4.0用：シンプルで短いプロンプト（200-300文字）
+- DALL-E 3用：詳細な説明が可能（2000文字以上でもOK）
+- 混在させない、用途別にディレクトリ分け
+
+---
+
+**最終更新：2025/12/22**
 
